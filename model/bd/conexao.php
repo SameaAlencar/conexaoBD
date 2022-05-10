@@ -18,8 +18,7 @@ const DATABASE = 'dbcontatos';
 //var_dump($resultado);
 //echo('</pre>');
  // Abre a conexão com o BD Mysql
-function conexaoMysql()
-{
+function conexaoMysql(){
     $conexao = array();
 
     //se a conexão for estabelecida com o bd, iremos ter um array de dados sobre a conexão
@@ -33,7 +32,7 @@ function conexaoMysql()
     }
 
 
-}
+   }
 
     function fecharConexaoMysql($conexao){
         mysqli_close($conexao);

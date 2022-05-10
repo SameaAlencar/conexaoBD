@@ -17,21 +17,26 @@ function insertContato($dadosContato){
 
     $conexao = conexaoMysql();
 
-//Monta o script para enviar para o BD
+  //Monta o script para enviar para o BD
     $sql = "insert into tblcontatos
                 (nome,
                 telefone,
                 celular,
                 email,
-                obs)
+                obs,
+                foto,
+                idestado)
          values
                ('".$dadosContato['nome']."',
                '".$dadosContato['telefone']."',
                '".$dadosContato['celular']."',
                '".$dadosContato['email']."',
-               '".$dadosContato['obs']."');";
+               '".$dadosContato['obs']."',
+               '".$dadosContato['foto']."',
+               '".$dadosContato['idestado']."')";
+               
 
-//executa o script no BD
+   //executa o script no BD
 
         
 
@@ -54,7 +59,42 @@ function insertContato($dadosContato){
 }
 
 //função para realizar o update do BD
-function updateContato(){
+function updateContato($dadosContato){
+    
+    $statusResposta = (boolean) false;
+    //abre a conexao com o banco
+        $conexao = conexaoMysql();
+
+        $sql = "update tblcontatos set
+        nome       = '".$dadosContato['nome']."',
+        telefone   = '".$dadosContato['telefone']."',
+        celular    = '".$dadosContato['celular']."',
+        email      = '".$dadosContato['email']."',
+        obs        = '".$dadosContato['obs']."',
+        foto       = '".$dadosContato['foto']."',
+        idestado   = '".$dadosContato['idestado']."'
+
+
+        where idcontato = ".$dadosContato['id'];
+  
+        
+         //executa o script no bd
+         //validacao para identificar se o script esta certo
+        if(mysqli_query($conexao,$sql)){
+           //validacao para verificae se uma linha foi acrescentada no DB
+           
+            if(mysqli_affected_rows($conexao))
+            {
+             $statusResposta = "true";
+        
+            }
+        
+        }
+
+       
+        // solicita o fechamento 
+        fecharConexaoMysql($conexao);
+        return $statusResposta;
 
 }
 
@@ -111,14 +151,19 @@ function selectAllContato(){
                 "telefone"  => $rsDados['telefone'],
                 "celular"   => $rsDados['celular'],
                 "email"     => $rsDados['email'],
-                "obs"       => $rsDados['obs']
+                "obs"       => $rsDados['obs'],
+                "foto"      => $rsDados['foto'],
+                "idestado"  => $rsDados['idestado']
             );
             $cont++;
         }
         //Solicita o fechamento da conexao com o BD
         fecharConexaoMysql($conexao);
 
-        return $arrayDados;
+        if(isset($arrayDados))
+            return $arrayDados;
+        else
+            return false;
     }
 
 }
@@ -151,7 +196,9 @@ function selectByIdContato($id){
                   "telefone"  => $rsDados['telefone'],
                   "celular"   => $rsDados['celular'],
                   "email"     => $rsDados['email'],
-                  "obs"       => $rsDados['obs']
+                  "obs"       => $rsDados['obs'],
+                  "foto"      => $rsDados['foto'],
+                  "idestado"  => $rsDados['idestado']
               );
             
           }

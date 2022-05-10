@@ -6,8 +6,8 @@ body, h1, p{
     padding: 0px;
 }
 #cadastro{
-    width: 800px;
-    min-height: 700px;
+    width: 750px;
+    min-height: 750px;
     height: auto;
     margin-left: auto;
     margin-right: auto;
@@ -154,7 +154,7 @@ input[type=email]:hover{
     width: 50px;
     height: 30px;
     text-align: center;
-    background-color: darkseagreen;
+    background-color: rgb(240, 191, 217);
     border: solid 1px black;
 }
 .tblImagens{
@@ -240,8 +240,8 @@ input[type=email]:hover{
 }
 
 .foto{
-    width: 80px;
-    height: 80px;
+    width: 105px;
+    height: 70px;
 }
 
 #visualizarFoto{

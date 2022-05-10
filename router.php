@@ -15,8 +15,7 @@
 
     //Validação para verificar se a requisição é um
     //POST de um formulário
-    if($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] =='GET')
-    {
+    if($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] =='GET'){
         //recebendo dados via URL para saber quem tá solicitando e qual ação
         // será realizada
 
@@ -35,8 +34,12 @@
                 //Validação para identificar o tipo de ação a ser realizada
                if($action == 'INSERIR'){
 
-                //Chama a função de inserir controller
-                 $resposta = inserirContato($_POST);
+                  if(isset($_FILES) && !empty($_FILES)){
+                     //chama a função de inserir na controller
+                     $resposta = inserirContato($_POST, $_FILES);
+                  }else{
+                     $resposta = insertContato($_POST, null);
+                  }
 
                  //Valida o tipo de dados que a controller retornou
                  if(is_bool($resposta)){ //se for bolleano
@@ -59,7 +62,15 @@
             //recebe o id do registro que deverá ser excluído, que foi enviado pela url
             //no link da imagem do excluir que foi acionado na index
             $idContato = $_GET['id'];
-            $resposta = excluirContato($idContato);
+            $foto = $_GET['foto'];
+
+            //Criamos um array para encaminhar os valores do id e da foto para a controller
+            $arrayDados = array(
+               "id"    => $idContato,
+               "foto"  => $foto
+            );
+
+            $resposta = excluirContato($arrayDados);
 
             if(is_bool($resposta)){
 
@@ -106,6 +117,39 @@
             // assim não havendo um novo carregamento da página
            require_once('index.php');
 
+         }elseif($action ==   'ATUALIZAR')
+         {
+            //recebe 
+             $idContato = $_GET['id'];
+            //recebe o nome da foto que foi enviada pelo get do form
+             $foto = $_GET['foto'];
+
+             //cria um array contendo o id e o nome da foto para enviar a controller
+             $arrayDados = array(
+                "id"   => $idContato,
+                "foto" => $foto,
+                "file" =>$_FILES
+             );
+             
+             //chama a funcao de editar na controller
+             $resposta = atualizarContato($_POST, $arrayDados);
+             //valida o tipo de dados que a controller retornou
+             if(is_bool($resposta))//se for booleano
+             { 
+
+                 //verifica se o retorno foi verdadeiro
+                 if($resposta)
+                     echo("<script>
+                     alert('Registro Inserido com sucesso!');
+                     window.location.href = 'index.php';
+                     </script>");
+             //se o retorno for um array significa erro no processo de inserção
+             }elseif(is_array($resposta)){
+                 echo("<script>
+                 alert('".$resposta['message']."');
+                 window.history.back();
+                 </script>");
+             }
          }
 
            break;
