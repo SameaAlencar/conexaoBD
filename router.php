@@ -130,7 +130,6 @@
                 "foto" => $foto,
                 "file" =>$_FILES
              );
-             
              //chama a funcao de editar na controller
              $resposta = atualizarContato($_POST, $arrayDados);
              //valida o tipo de dados que a controller retornou
